@@ -757,7 +757,12 @@
 <h3 class="font-bold text-lg truncate" id="drawer-name">Загрузка...</h3>
 <div class="flex" id="drawer-badges"></div>
 </div>
-<p class="text-white/60 text-xs truncate" id="drawer-email"></p>
+<div class="flex items-center gap-2 mt-1">
+  <p class="text-white/60 text-xs truncate flex-1" id="drawer-email"></p>
+  <button onclick="toggleDrawerEmail()" style="background:rgba(255,255,255,0.15);border:none;border-radius:8px;padding:2px 6px;cursor:pointer;" id="drawer-email-toggle-btn">
+    <span class="material-icons text-white/60" style="font-size:14px;" id="drawer-email-eye">visibility</span>
+  </button>
+</div>
 </div>
 <div class="py-2">
 <button class="w-full flex items-center gap-4 px-6 py-4 font-bold text-slate-700 dark:text-slate-300 btn-interact" onclick="nav('profile-screen'); toggleD()">
@@ -768,7 +773,10 @@
         </button>
 <button class="w-full flex items-center gap-4 px-6 py-4 font-bold text-slate-700 dark:text-slate-300 btn-interact" onclick="nav('premium-screen'); toggleD()">
 <span class="material-icons text-amber-500">stars</span>Premium
-        </button>
+</button>
+<button class="w-full flex items-center gap-4 px-6 py-4 font-bold text-slate-700 dark:text-slate-300 btn-interact" onclick="openStarsScreen(); toggleD()">
+<span class="material-icons text-amber-400">auto_awesome</span>Stars
+</button>
 <button class="w-full flex items-center gap-4 px-6 py-4 font-bold text-slate-700 dark:text-slate-300 btn-interact" onclick="nav('settings-screen'); toggleD()">
 <span class="material-icons text-slate-400">settings</span>Настройки
 </button>
@@ -973,6 +981,17 @@
 <p class="text-primary font-bold text-sm" id="p-user">@user</p>
 <p class="text-slate-400 font-medium text-sm hidden" id="p-custom-user"></p>
 </div>
+<!-- Level & Rep bar -->
+<div id="p-level-bar" style="width:100%;max-width:300px;margin:0 auto 20px;padding:12px 16px;background:var(--surface);border-radius:20px;border:1px solid var(--border);">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+    <span id="p-level-label" style="font-size:13px;font-weight:900;color:var(--text-primary);">Уровень 1</span>
+    <span id="p-rep-label" style="font-size:11px;font-weight:700;color:#94a3b8;">0 очков</span>
+  </div>
+  <div style="background:var(--surface2);border-radius:999px;height:7px;overflow:hidden;">
+    <div id="p-level-progress" style="height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#7c3aed,#3b82f6);transition:width 0.5s;"></div>
+  </div>
+  <div id="p-rep-status" style="font-size:10px;margin-top:5px;font-weight:700;"></div>
+</div>
 <div class="w-full bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 mb-4 shadow-sm">
 <span class="text-[10px] font-black text-slate-300 uppercase block mb-2 tracking-widest">О себе</span>
 <textarea class="w-full text-sm border-none bg-transparent p-0 focus:ring-0 resize-none font-medium text-slate-700 dark:text-slate-300" id="p-bio" placeholder="Расскажите о своем хвостике..." rows="2"></textarea>
@@ -1055,7 +1074,16 @@
 <h2 class="text-2xl font-black" id="vp-name">...</h2>
 <div class="flex gap-1" id="vp-badge"></div>
 </div>
-<p class="text-primary font-bold text-sm mb-6" id="vp-user">@user</p>
+<p class="text-primary font-bold text-sm mb-2" id="vp-user">@user</p>
+<div id="vp-level-bar" style="width:100%;max-width:280px;margin:0 auto 20px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+    <span id="vp-level-label" style="font-size:12px;font-weight:900;color:var(--text-primary);"></span>
+    <span id="vp-rep-label" style="font-size:11px;font-weight:700;color:#94a3b8;"></span>
+  </div>
+  <div style="background:var(--surface2);border-radius:999px;height:7px;overflow:hidden;">
+    <div id="vp-level-progress" style="height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#7c3aed,#3b82f6);transition:width 0.5s;"></div>
+  </div>
+</div>
 <div class="w-full bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 mb-4 shadow-sm">
 <span class="text-[10px] font-black text-slate-300 uppercase block mb-2 tracking-widest">О себе</span>
 <p class="text-sm font-medium text-slate-700 dark:text-slate-300" id="vp-bio"></p>
@@ -1368,6 +1396,26 @@
     </div>
 </div>
 
+<!-- Mellstroy Режим -->
+<div id="mellstroy-mode-row" class="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm" style="border:2px solid #dc2626;">
+    <p class="text-[10px] font-black uppercase tracking-widest mb-4" style="color:#dc2626;">👊 MELLSTROY UPDATE</p>
+    <div class="flex items-center justify-between py-2">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden" style="background:#dc2626;">
+                <img src="Gifts/Mellstroy.png" class="w-7 h-7 object-contain" onerror="this.parentNode.innerHTML='👊'">
+            </div>
+            <div>
+                <div class="font-bold text-sm dark:text-white">👊 Mellstroy Режим</div>
+                <div class="text-xs text-slate-400">Включить фоновую музыку Mellstroy</div>
+            </div>
+        </div>
+        <button id="mellstroy-mode-toggle" onclick="toggleMellstroyMode()" class="w-12 h-6 rounded-full relative transition-colors duration-300 bg-slate-200">
+            <div class="w-4 h-4 bg-white rounded-full absolute top-1 shadow-sm transition-all duration-300" id="mellstroy-mode-knob" style="left:4px"></div>
+        </button>
+    </div>
+    <audio id="mellstroy-audio" src="Gifts/Mellstroy.mp3" loop style="display:none;"></audio>
+</div>
+
 <!-- О приложении -->
 <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm mb-4">
     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">ℹ️ О приложении</p>
@@ -1377,7 +1425,7 @@
         </div>
         <div>
             <div class="font-black text-lg dark:text-white">PupkinGram</div>
-            <div class="text-xs text-slate-400">Версия 4.0 • Для хвостиков и их людей</div>
+            <div class="text-xs text-slate-400">Версия 4.1 • Для хвостиков и их людей</div>
         </div>
     </div>
 </div>
@@ -1455,6 +1503,7 @@
         <option value="mango">🥭 Mango</option>
         <option value="heart">❤️ Heart</option>
         <option value="pepe">🐸 Pepe</option>
+        <option value="mellstroy">👊 Mellstroy</option>
     </select>
     <input type="text" id="admin-gift-uid" placeholder="UID пользователя" class="w-full p-2 rounded-xl bg-slate-100 dark:bg-slate-700 mb-2">
     <button class="w-full bg-purple-600 text-white p-2 rounded-xl font-bold btn-interact" onclick="adminSendGift(document.getElementById('admin-gift-uid').value, document.getElementById('admin-gift-select').value)">Выдать подарок</button>
@@ -1481,20 +1530,34 @@
     <button class="w-full bg-amber-500 text-white p-3 rounded-xl font-bold btn-interact" onclick="adminGiveStars()">⭐ Выдать звёзды</button>
 </div>
 
-<!-- Комьюнити Ивент -->
+<!-- Ивенты -->
 <div class="p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
-    <h3 class="font-black text-purple-700 mb-4 text-[10px] uppercase tracking-[0.2em]">🔥 Комьюнити Ивент</h3>
-    
-    <!-- Статус ивента -->
+    <h3 class="font-black text-purple-700 mb-4 text-[10px] uppercase tracking-[0.2em]">🔥 Управление Ивентом</h3>
+
+    <!-- Выбор типа ивента -->
+    <div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Тип ивента</div>
+    <div class="grid grid-cols-2 gap-2 mb-4">
+        <button id="admin-ev-type-community" onclick="adminSelectEventType('community')" class="p-3 rounded-xl font-bold text-sm btn-interact bg-purple-600 text-white">⭐ Community</button>
+        <button id="admin-ev-type-mellstroy" onclick="adminSelectEventType('mellstroy')" class="p-3 rounded-xl font-bold text-sm btn-interact bg-slate-100 dark:bg-slate-700 dark:text-white">👊 Mellstroy</button>
+    </div>
+
+    <!-- Статус -->
     <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl mb-3">
         <div>
-            <div class="font-bold text-sm dark:text-white">Статус ивента</div>
+            <div class="font-bold text-sm dark:text-white">Статус</div>
             <div class="text-xs text-slate-400" id="admin-event-status-label">Загрузка...</div>
         </div>
         <button id="admin-event-toggle-btn" onclick="adminToggleEvent()" class="px-4 py-2 rounded-xl font-bold text-sm btn-interact bg-green-500 text-white">Запустить</button>
     </div>
-    
-    <!-- Таймер ивента -->
+
+    <!-- Цель Mellstroy (только для mellstroy ивента) -->
+    <div id="admin-mellstroy-goal-row" style="display:none" class="p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl mb-3">
+        <div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">🎯 Цель (кликов)</div>
+        <input type="number" id="admin-mellstroy-goal" placeholder="5000" value="5000" min="100" class="w-full bg-white dark:bg-slate-600 dark:text-white border border-slate-200 dark:border-slate-500 p-2 rounded-xl text-sm text-center font-bold mb-2">
+        <button onclick="adminSetMellstroyGoal()" class="w-full bg-purple-500 text-white p-2 rounded-xl font-bold text-sm btn-interact">✅ Установить цель</button>
+    </div>
+
+    <!-- Таймер -->
     <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl mb-3">
         <div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">⏱ Таймер окончания</div>
         <div class="flex gap-2">
@@ -1503,15 +1566,28 @@
         </div>
         <button onclick="adminSetEventTimer()" class="w-full mt-2 bg-blue-500 text-white p-2 rounded-xl font-bold text-sm btn-interact">⏰ Установить таймер</button>
     </div>
-    
-    <!-- Прогресс ивента -->
+
+    <!-- Прогресс -->
     <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl mb-3">
         <div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-1">Текущий прогресс</div>
         <div class="text-2xl font-black dark:text-white" id="admin-event-stars-display">0 / 1000 ⭐</div>
     </div>
-    
-    <!-- Сброс ивента -->
+
+    <!-- Сброс -->
     <button onclick="adminResetEvent()" class="w-full bg-red-500 text-white p-3 rounded-xl font-bold btn-interact">🔄 Сбросить ивент</button>
+</div>
+
+<!-- Переключатель Рулетки -->
+<div class="p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+    <h3 class="font-black text-purple-700 mb-4 text-[10px] uppercase tracking-[0.2em]">🎰 Рулетка</h3>
+    <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl mb-3">
+        <div>
+            <div class="font-bold text-sm dark:text-white">Кнопка рулетки</div>
+            <div class="text-xs text-slate-400" id="admin-roulette-status">Загрузка...</div>
+        </div>
+        <button id="admin-roulette-toggle-btn" onclick="adminToggleRoulette()" class="px-4 py-2 rounded-xl font-bold text-sm btn-interact bg-green-500 text-white">Включена</button>
+    </div>
+    <p class="text-xs text-slate-400">При отключении вкладка рулетки скроется у всех пользователей</p>
 </div>
 
 <!-- Countdown -->
@@ -1527,6 +1603,53 @@
     <div class="text-xs text-slate-400 mb-3">Введите Unix timestamp в секундах. <a href="https://www.unixtimestamp.com" target="_blank" class="text-purple-500 font-bold">unixtimestamp.com</a></div>
     <button onclick="adminSetCountdown()" class="w-full bg-purple-600 text-white p-3 rounded-xl font-bold btn-interact mb-2">⏳ Запустить Countdown</button>
     <button onclick="adminStopCountdown()" class="w-full bg-red-500 text-white p-3 rounded-xl font-bold btn-interact">🛑 Остановить</button>
+</div>
+
+<!-- Массовая очистка -->
+<div class="p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+    <h3 class="font-black text-red-600 mb-4 text-[10px] uppercase tracking-[0.2em]">🗑️ Массовая очистка</h3>
+    <div class="space-y-3">
+        <!-- Очистить подарки -->
+        <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl">
+            <div class="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Подарки</div>
+            <div class="flex gap-2 mb-2">
+                <select id="admin-clear-gift-type" class="flex-1 bg-white dark:bg-slate-600 dark:text-white border border-slate-200 dark:border-slate-500 p-2 rounded-xl text-sm">
+                    <option value="all">Все подарки</option>
+                    <option value="mango">🥭 Mango</option>
+                    <option value="heart">❤️ Heart</option>
+                    <option value="pepe">🐸 Pepe</option>
+                    <option value="mellstroy">👊 Mellstroy</option>
+                </select>
+            </div>
+            <button onclick="adminClearGiftsAll()" class="w-full bg-red-500 text-white p-2 rounded-xl font-bold text-sm btn-interact">🗑️ Удалить у всех</button>
+        </div>
+        <!-- Очистить рулетку -->
+        <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl">
+            <div class="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Спины рулетки</div>
+            <button onclick="adminClearSpinsAll()" class="w-full bg-orange-500 text-white p-2 rounded-xl font-bold text-sm btn-interact">🎰 Сбросить спины у всех</button>
+        </div>
+        <!-- Снять звёзды -->
+        <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl">
+            <div class="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Звёзды</div>
+            <input type="number" id="admin-clear-stars-amount" placeholder="Кол-во звёзд (0 = все)" min="0" class="w-full bg-white dark:bg-slate-600 dark:text-white border border-slate-200 dark:border-slate-500 p-2 rounded-xl text-sm mb-2">
+            <button onclick="adminClearStarsAll()" class="w-full bg-yellow-500 text-white p-2 rounded-xl font-bold text-sm btn-interact">⭐ Снять звёзды у всех</button>
+        </div>
+        <!-- Сброс репутации -->
+        <div class="p-3 bg-slate-50 dark:bg-slate-700 rounded-2xl">
+            <div class="text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Репутация/Уровень</div>
+            <button onclick="adminResetRepAll()" class="w-full bg-purple-500 text-white p-2 rounded-xl font-bold text-sm btn-interact">🏆 Сбросить репутацию у всех</button>
+        </div>
+    </div>
+</div>
+
+<!-- Управление новостями -->
+<div class="p-6 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+    <h3 class="font-black text-blue-600 mb-4 text-[10px] uppercase tracking-[0.2em]">📰 Новости</h3>
+    <input type="text" id="admin-news-title" placeholder="Заголовок новости" class="w-full bg-slate-50 dark:bg-slate-700 dark:text-white border-none p-3 rounded-xl mb-3 text-sm font-bold">
+    <textarea id="admin-news-body" placeholder="Полный текст новости..." rows="4" class="w-full bg-slate-50 dark:bg-slate-700 dark:text-white border-none p-3 rounded-xl mb-3 text-sm resize-none"></textarea>
+    <button onclick="adminPublishNews()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold btn-interact mb-3">📢 Опубликовать</button>
+    <div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Опубликованные новости</div>
+    <div id="admin-news-list" style="max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;"></div>
 </div>
 
 <!-- Блокировка сайта по странам -->
@@ -1558,6 +1681,47 @@
 </div>
 </div>
 <!-- Navigation Tab Bar -->
+
+<!-- No Event Screen -->
+<div class="screen" id="no-event-screen">
+<header class="h-16 flex items-center px-6 sticky top-0 z-50" style="background:linear-gradient(135deg,#475569,#1e293b);">
+  <h1 class="font-black text-lg text-white flex-1">🔥 Ивент</h1>
+</header>
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:48px 24px;text-align:center;">
+  <div style="width:90px;height:90px;background:linear-gradient(135deg,#475569,#1e293b);border-radius:28px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 16px 40px rgba(71,85,105,0.3);">
+    <span class="material-icons" style="font-size:48px;color:white;">local_fire_department</span>
+  </div>
+  <h2 style="font-size:22px;font-weight:900;color:var(--text-primary);margin-bottom:8px;">Ивентов пока нет</h2>
+  <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;">Следите за обновлениями — скоро начнётся новое событие!</p>
+</div>
+</div>
+
+<!-- News Screen -->
+<div class="screen" id="news-screen">
+<header class="h-16 flex items-center px-6 sticky top-0 z-50 bg-white dark:bg-slate-800 border-b dark:border-slate-700">
+  <h1 class="font-black text-lg dark:text-white flex-1">📰 Новости</h1>
+</header>
+<div id="news-list-container" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;">
+  <div id="news-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;">
+    <span class="material-icons" style="font-size:56px;color:#94a3b8;margin-bottom:12px;">newspaper</span>
+    <div style="font-size:16px;font-weight:800;color:var(--text-secondary);">Новостей пока нет</div>
+  </div>
+  <div id="news-items-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+</div>
+</div>
+
+<!-- News Detail Screen -->
+<div class="screen" id="news-detail-screen">
+<header class="h-16 flex items-center px-6 sticky top-0 z-50 bg-white dark:bg-slate-800 border-b dark:border-slate-700">
+  <button class="material-icons mr-4 btn-interact p-1 text-slate-700 dark:text-slate-300" onclick="nav('news-screen')">arrow_back</button>
+  <h1 class="font-black text-lg dark:text-white flex-1 truncate" id="news-detail-title">Новость</h1>
+</header>
+<div style="flex:1;overflow-y:auto;padding:20px;">
+  <div style="font-size:11px;font-weight:700;color:#94a3b8;margin-bottom:16px;" id="news-detail-date"></div>
+  <div style="font-size:15px;line-height:1.7;color:var(--text-primary);white-space:pre-wrap;" id="news-detail-body"></div>
+</div>
+</div>
+
 <nav class="tab-bar" id="tab-bar">
 <div class="tab-bar-inner">
 <button class="text-slate-400 btn-interact" id="t-chats" onclick="nav('chats-screen')">
@@ -1568,20 +1732,15 @@
 <span class="material-icons mb-1" style="font-size:22px">explore</span>
 <span class="text-[9px] font-black uppercase tracking-tighter">Поиск</span>
 </button>
-<button class="text-slate-400 btn-interact" id="t-premium" onclick="nav('premium-screen')">
-<span class="material-icons mb-1 text-amber-500" style="font-size:22px">stars</span>
-<span class="text-[9px] font-black uppercase tracking-tighter">Premium</span>
-</button>
-
-<button class="text-slate-400 btn-interact" id="t-stars" onclick="openStarsScreen()">
-<span class="material-icons mb-1 text-amber-400" style="font-size:22px">auto_awesome</span>
-<span class="text-[9px] font-black uppercase tracking-tighter">Stars</span>
+<button class="text-slate-400 btn-interact" id="t-news" onclick="nav('news-screen')">
+<span class="material-icons mb-1" style="font-size:22px;color:#3b82f6">newspaper</span>
+<span class="text-[9px] font-black uppercase tracking-tighter">Новости</span>
 </button>
 <button class="text-slate-400 btn-interact" id="t-roulette" onclick="nav('roulette-screen')">
 <span class="material-icons mb-1" style="font-size:22px;background:linear-gradient(135deg,#f59e0b,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">casino</span>
 <span class="text-[9px] font-black uppercase tracking-tighter">Рулетка</span>
 </button>
-<button class="text-slate-400 btn-interact" id="t-settings" onclick="nav('event-screen')" style="position:relative;">
+<button class="text-slate-400 btn-interact" id="t-settings" onclick="openEventPicker()" style="position:relative;">
 <span class="material-icons mb-1" style="font-size:22px;background:linear-gradient(135deg,#f59e0b,#f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">local_fire_department</span>
 <span class="text-[9px] font-black uppercase tracking-tighter">Ивент</span>
 <span id="event-tab-timer" style="display:none;position:absolute;top:-2px;left:50%;transform:translateX(-50%);background:#f43f5e;color:white;font-size:8px;font-weight:900;padding:1px 5px;border-radius:999px;white-space:nowrap;"></span>
@@ -1672,6 +1831,92 @@
   </div>
 </div>
 
+
+
+<!-- Event Picker Modal -->
+<div id="event-picker-modal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.6);align-items:flex-end;justify-content:center;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="width:100%;max-width:460px;background:var(--surface);border-radius:32px 32px 0 0;padding:24px;box-shadow:0 -10px 60px rgba(0,0,0,0.2);" onclick="event.stopPropagation()">
+    <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;text-align:center;">🔥 Выбрать ивент</div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <button onclick="document.getElementById('event-picker-modal').style.display='none'; nav('event-screen')" style="width:100%;padding:18px;background:linear-gradient(135deg,#7c3aed,#f43f5e);color:white;font-size:16px;font-weight:900;border:none;border-radius:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
+        ⭐ Community Event
+      </button>
+      <button id="event-picker-mell-btn" onclick="document.getElementById('event-picker-modal').style.display='none'; nav('mellstroy-event-screen')" style="width:100%;padding:18px;background:linear-gradient(135deg,#dc2626,#7f1d1d);color:white;font-size:16px;font-weight:900;border:none;border-radius:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
+        <img src="Gifts/Mellstroy.png" style="width:22px;height:22px;object-fit:contain;" onerror="this.style.display='none'"> 👊 Mellstroy Event
+      </button>
+      <button onclick="document.getElementById('event-picker-modal').style.display='none'" style="width:100%;padding:14px;background:var(--surface2);color:var(--text-secondary);font-size:14px;font-weight:700;border:none;border-radius:16px;cursor:pointer;">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MELLSTROY EVENT SCREEN ===== -->
+<div class="screen" id="mellstroy-event-screen">
+<header class="h-16 flex items-center px-6 sticky top-0 z-50" style="background:linear-gradient(135deg,#dc2626,#7f1d1d);">
+  <button class="material-icons mr-3 btn-interact p-1 text-white" onclick="nav('chats-screen')">arrow_back</button>
+  <img src="Gifts/Mellstroy.png" style="width:32px;height:32px;object-fit:contain;margin-right:10px;" onerror="this.style.display='none'">
+  <h1 class="font-black text-lg text-white flex-1">Mellstroy Event</h1>
+</header>
+
+<div id="mell-inactive-banner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:48px 24px;text-align:center;">
+  <div style="width:90px;height:90px;background:linear-gradient(135deg,#dc2626,#7f1d1d);border-radius:28px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 16px 40px rgba(220,38,38,0.3);overflow:hidden;">
+    <img src="Gifts/Mellstroy.png" style="width:64px;height:64px;object-fit:contain;" onerror="this.parentNode.innerHTML='👊'">
+  </div>
+  <h2 style="font-size:22px;font-weight:900;color:var(--text-primary);margin-bottom:8px;">Ивент не активен</h2>
+  <p style="font-size:14px;color:var(--text-secondary);">Ожидайте запуска Mellstroy Event!</p>
+</div>
+
+<div id="mell-active-content" style="display:none;flex:1;overflow-y:auto;padding:20px;flex-direction:column;gap:16px;">
+
+  <!-- Timer -->
+  <div id="mell-timer-banner" style="display:none;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:20px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;">До конца ивента</div>
+      <div id="mell-countdown-text" style="font-size:22px;font-weight:900;color:#dc2626;font-variant-numeric:tabular-nums;">—</div>
+    </div>
+    <span style="font-size:32px;">⏳</span>
+  </div>
+
+  <!-- Progress -->
+  <div style="background:var(--surface);border-radius:24px;padding:20px;box-shadow:var(--shadow-md);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div>
+        <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Всего кликов</div>
+        <div style="font-size:28px;font-weight:900;color:var(--text-primary);margin-top:2px;">
+          <span id="mell-total-clicks">0</span>
+          <span style="font-size:16px;color:var(--text-muted);">/ <span id="mell-goal-display">5000</span></span>
+        </div>
+      </div>
+      <div style="font-size:36px;font-weight:900;color:#dc2626;" id="mell-pct-text">0%</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:999px;height:14px;overflow:hidden;">
+      <div id="mell-main-progress" style="height:100%;width:0%;background:linear-gradient(90deg,#dc2626,#f97316,#fbbf24);border-radius:999px;transition:width 0.4s ease;"></div>
+    </div>
+  </div>
+
+  <!-- Reward info -->
+  <div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);border-radius:24px;padding:18px;color:white;">
+    <div style="font-size:11px;font-weight:800;opacity:.7;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">🏆 Награда при выполнении</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;">
+        <img src="Gifts/Mellstroy.png" style="width:22px;height:22px;object-fit:contain;" onerror="this.style.display='none'"> Подарок Mellstroy
+      </div>
+      <div style="font-size:14px;font-weight:700;">⭐ 50 звёзд</div>
+    </div>
+  </div>
+
+  <!-- Click button -->
+  <button id="mell-click-btn" onclick="mellstroyClick()" style="width:100%;padding:0;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+    <div style="background:linear-gradient(135deg,#dc2626,#7f1d1d);border-radius:28px;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 12px 40px rgba(220,38,38,0.4);transition:transform 0.08s,box-shadow 0.08s;" id="mell-click-inner">
+      <div style="width:90px;height:90px;background:rgba(255,255,255,0.15);border-radius:24px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <img src="Gifts/Mellstroy.png" style="width:72px;height:72px;object-fit:contain;" onerror="this.outerHTML='<span style=font-size:56px>👊</span>'">
+      </div>
+      <div style="color:white;font-size:20px;font-weight:900;letter-spacing:.02em;">👊 КЛИКНИ!</div>
+      <div style="color:rgba(255,255,255,0.7);font-size:12px;font-weight:700;">Мой вклад: <span id="mell-my-clicks">0</span> кликов</div>
+    </div>
+  </button>
+
+</div>
+</div>
 
 <div class="screen" id="roulette-screen">
   <!-- Header -->
@@ -2361,6 +2606,7 @@ const PREMIUM_ICON = '<span class="material-icons text-premium text-[16px]">star
         // initSettings is called via the nav override in settings JS block
         setTimeout(initSettings, 50);
         if(window.checkNeonTheme) setTimeout(checkNeonTheme, 100);
+        if(window.checkMellstroyMode) setTimeout(checkMellstroyMode, 120);
     }
     
     document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('tab-active'));
@@ -2369,7 +2615,11 @@ const PREMIUM_ICON = '<span class="material-icons text-premium text-[16px]">star
         'search-screen': 'search', 
         'premium-screen': 'premium',
         'profile-screen': 'profile',
-        'event-screen': 'settings'
+        'event-screen': 'settings',
+        'mellstroy-event-screen': 'settings',
+        'no-event-screen': 'settings',
+        'news-screen': 'news',
+        'news-detail-screen': 'news'
     };
     const activeId = prefixMap[s];
     if(activeId) {
@@ -2558,8 +2808,22 @@ window.playNotificationSound = () => {
             window._eventListenerStarted = true;
             setTimeout(() => {
                 listenEvent && listenEvent();
+                listenMellstroyEvent && listenMellstroyEvent();
                 listenCountdown && listenCountdown();
+                listenNews && listenNews();
+                listenRouletteToggle && listenRouletteToggle();
                 checkEventSpins && checkEventSpins();
+                checkMellstroyMode && checkMellstroyMode();
+                renderMyLevelBar && renderMyLevelBar();
+                // Mellstroy mode is available to everyone by default
+                // Realtime listener for rep changes
+                onValue(ref(db, 'users/' + me.uid + '/repScore'), (snap) => {
+                    if(snap.exists() && meData) {
+                        meData.repScore = snap.val();
+                        meData.repLevel = meData.repScore < 0 ? 1 : Math.floor(meData.repScore / REP_PER_LEVEL) + 1;
+                        renderMyLevelBar && renderMyLevelBar();
+                    }
+                });
             }, 500);
         }
         // preloadAllUsersOnce() уже запущена при инициализации скрипта
@@ -3371,6 +3635,12 @@ window.sendMsg = async (custom) => {
     const i = el('msg-input');
     let t = custom || i.value.trim();
     if(!t || !chatID) return;
+
+    // REPUTATION CHECK
+    if(window._repCheckAndSend) {
+        const canSend = await window._repCheckAndSend(t);
+        if(!canSend) return;
+    }
     
     // Защита от спама
     if(isSending) {
@@ -3536,6 +3806,8 @@ const sendMessageToFirebase = (t, custom) => {
     };
 
     window.mediaIn = async () => { 
+    // REPUTATION CHECK for photos
+    if(window._checkRepForMedia && !window._checkRepForMedia('photo')) return;
     // Проверка для канала
     if(chatID && chatID.startsWith('channel_')) {
         const channelSnap = await get(ref(db, 'channels/' + chatID));
@@ -3602,6 +3874,8 @@ el('search-in').oninput = () => {
         el('vp-bio').innerText = u.bio || "Хвостик пока ничего не рассказал о себе.";
         el('vp-badge').innerHTML = getBadgesHTML(u);
         el('vp-chat-btn').onclick = () => openChat([me.uid, u.uid].sort().join('_'), u);
+        // Render level/rep bar
+        if(window.renderVpLevelBar) renderVpLevelBar(u);
         
         // Отображаем питомцев
         const pl = el('vp-pets-list'); 
@@ -4231,7 +4505,7 @@ window.applyLanguage = (lang) => {
         // About section version label
         const aboutVersion = document.querySelector('#settings-screen .text-xs.text-slate-400');
         if(aboutVersion && aboutVersion.textContent.includes('Версия')) {
-            aboutVersion.innerText = 'Version 4.0 • For tails and their people';
+            aboutVersion.innerText = 'Version 4.1 • For tails and their people';
         }
         
         // Search screen placeholder
@@ -4281,7 +4555,7 @@ window.applyLanguage = (lang) => {
         
         const aboutVersion = document.querySelector('#settings-screen .text-xs.text-slate-400');
         if(aboutVersion && aboutVersion.textContent.includes('Version')) {
-            aboutVersion.innerText = 'Версия 4.0 • Для хвостиков и их людей';
+            aboutVersion.innerText = 'Версия 4.1 • Для хвостиков и их людей';
         }
     }
 };
@@ -5063,6 +5337,8 @@ window.openCurrentGroupInfo = () => {
 };
 
 window.sendWalkies = async () => {
+    // REPUTATION CHECK for walk
+    if(window._checkRepForMedia && !window._checkRepForMedia('walk')) return;
     // Проверка для канала
     if(chatID && chatID.startsWith('channel_')) {
         const channelSnap = await get(ref(db, 'channels/' + chatID));
@@ -5216,6 +5492,8 @@ window.openCurrentGroupInfo = () => {
 
 // Открыть выбор файла
 window.openFilePicker = () => {
+    // REPUTATION CHECK for photos
+    if(window._checkRepForMedia && !window._checkRepForMedia('photo')) return;
     const input = document.getElementById('file-input');
     if(input) {
         input.click();
@@ -5225,6 +5503,12 @@ window.openFilePicker = () => {
 window.uploadFile = (input) => {
     if(!input.files || !input.files[0]) {
         toast("Выберите файл", 1);
+        return;
+    }
+    
+    // REPUTATION CHECK for photos
+    if(window._checkRepForMedia && !window._checkRepForMedia('photo')) {
+        input.value = '';
         return;
     }
     
@@ -5343,7 +5627,8 @@ window.fixPremiumTime = async () => {
 const GIFTS = [
     { id: 'mango', name: 'Mango', image: 'Gifts/Mango.png', emoji: '🥭' },
     { id: 'heart', name: 'Heart', image: 'Gifts/Heart.png', emoji: '❤️' },
-    { id: 'pepe', name: 'Pepe', image: 'Gifts/Pepe.png', emoji: '🐸' }
+    { id: 'pepe', name: 'Pepe', image: 'Gifts/Pepe.png', emoji: '🐸' },
+    { id: 'mellstroy', name: 'Mellstroy', image: 'Gifts/Mellstroy.png', emoji: '👊' }
 ];
 
 window.loadUserGifts = async (uid) => {
@@ -7229,6 +7514,9 @@ function updateVoiceTimer() {
 
 window.sendVoiceMessage = async () => {
     if(!recordedAudioBlob || !chatID) return;
+    
+    // REPUTATION CHECK for voice
+    if(window._checkRepForMedia && !window._checkRepForMedia('voice')) return;
     
     // Защита от спама
     if(isSendingVoice) {
@@ -9851,7 +10139,7 @@ const EVENT_GOALS = [
     { stars: 300,  reward: '3 бесплатных спина',          rewardType: 'spins', rewardAmount: 3 },
     { stars: 700,  reward: '5 бесплатных спинов',         rewardType: 'spins', rewardAmount: 5 },
     { stars: 900,  reward: '10 бесплатных спинов',        rewardType: 'spins', rewardAmount: 10 },
-    { stars: 1000, reward: '3 бесплатных спина', rewardType: 'premium+spins', rewardAmount: 3, premiumDays: 1 },
+    { stars: 1000, reward: 'Premium на 1 день + 3 спина', rewardType: 'premium+spins', rewardAmount: 3, premiumDays: 1 },
 ];
 
 let _eventUnsub = null;
@@ -9991,7 +10279,13 @@ function updateAdminEventUI(data) {
         toggleBtn.textContent = data.active ? 'Отключить' : 'Запустить';
         toggleBtn.style.background = data.active ? '#ef4444' : '#22c55e';
     }
-    if(starsDisp) starsDisp.textContent = `${data.totalStars || 0} / 1000 ⭐`;
+    if(starsDisp) {
+        if(_activeEventType === 'mellstroy') {
+            starsDisp.textContent = `${data.totalClicks || 0} / ${data.goal || 5000} 👊`;
+        } else {
+            starsDisp.textContent = `${data.totalStars || 0} / 1000 ⭐`;
+        }
+    }
 }
 
 window.openEventContributeModal = () => {
@@ -10214,6 +10508,372 @@ async function checkEventSpins() {
 
 // Also hook into loadAdm to refresh event admin UI - handled by realtime listener
 
+// ===================================================
+// ============= MELLSTROY UPDATE ====================
+// ===================================================
+
+// --- Active event type tracking ---
+let _activeEventType = 'community'; // 'community' | 'mellstroy'
+
+window.adminSelectEventType = (type) => {
+    _activeEventType = type;
+    const commBtn = document.getElementById('admin-ev-type-community');
+    const mellBtn = document.getElementById('admin-ev-type-mellstroy');
+    const goalRow = document.getElementById('admin-mellstroy-goal-row');
+    if(commBtn) commBtn.style.cssText = 'background:#7c3aed;color:white;padding:12px;border-radius:12px;font-weight:900;font-size:14px;';
+    if(mellBtn) mellBtn.style.cssText = 'background:#dc2626;color:white;padding:12px;border-radius:12px;font-weight:900;font-size:14px;';
+    if(type === 'community') {
+        if(commBtn) commBtn.style.background = '#7c3aed';
+        if(mellBtn) mellBtn.style.background = '#1e293b';
+        if(goalRow) goalRow.style.display = 'none';
+    } else {
+        if(commBtn) commBtn.style.background = '#1e293b';
+        if(mellBtn) mellBtn.style.background = '#dc2626';
+        if(goalRow) goalRow.style.display = 'block';
+    }
+    // Load the right event data into admin UI
+    const path = type === 'mellstroy' ? 'mellstroy_event' : 'community_event';
+    get(ref(db, path)).then(snap => {
+        const data = snap.val() || {};
+        updateAdminEventUI(data);
+        if(type === 'mellstroy') {
+            const goalInput = document.getElementById('admin-mellstroy-goal');
+            if(goalInput && data.goal) goalInput.value = data.goal;
+            const disp = document.getElementById('admin-event-stars-display');
+            if(disp) disp.textContent = `${data.totalClicks || 0} / ${data.goal || 5000} 👊`;
+        }
+    });
+};
+
+window.adminSetMellstroyGoal = async () => {
+    if(!meData?.isAdmin) return;
+    const goal = parseInt(document.getElementById('admin-mellstroy-goal')?.value || '5000');
+    if(goal < 100) { toast('Минимум 100 кликов', 1); return; }
+    await update(ref(db, 'mellstroy_event'), { goal });
+    toast(`✅ Цель установлена: ${goal} кликов`);
+};
+
+// --- Override adminToggleEvent to support both event types ---
+const _origAdminToggle = window.adminToggleEvent;
+window.adminToggleEvent = async () => {
+    if(!meData?.isAdmin) { toast('Только для администраторов', 1); return; }
+    const path = _activeEventType === 'mellstroy' ? 'mellstroy_event' : 'community_event';
+    const snap = await get(ref(db, path));
+    const current = snap.val() || {};
+    const isActive = current.active === true;
+    await update(ref(db, path), { active: !isActive });
+    toast(isActive ? '🔴 Ивент отключён' : '🟢 Ивент запущен!');
+};
+
+// --- Override adminSetEventTimer ---
+const _origAdminTimer = window.adminSetEventTimer;
+window.adminSetEventTimer = async () => {
+    if(!meData?.isAdmin) return;
+    const hours = parseInt(document.getElementById('admin-event-hours')?.value || '0') || 0;
+    const mins  = parseInt(document.getElementById('admin-event-minutes')?.value || '0') || 0;
+    if(hours === 0 && mins === 0) { toast('Введите время', 1); return; }
+    const endsAt = Date.now() + hours * 3600000 + mins * 60000;
+    const path = _activeEventType === 'mellstroy' ? 'mellstroy_event' : 'community_event';
+    await update(ref(db, path), { endsAt });
+    toast(`⏰ Таймер установлен: ${hours}ч ${mins}м`);
+};
+
+// --- Override adminResetEvent ---
+const _origAdminReset = window.adminResetEvent;
+window.adminResetEvent = async () => {
+    if(!meData?.isAdmin) return;
+    const label = _activeEventType === 'mellstroy' ? 'Mellstroy Event' : 'Community Event';
+    if(!confirm(`Сбросить ${label}? Весь прогресс будет удалён.`)) return;
+    if(_activeEventType === 'mellstroy') {
+        await set(ref(db, 'mellstroy_event'), { active: false, totalClicks: 0, goal: 5000, rewardGiven: false, rewardDistributed: false, endsAt: null });
+    } else {
+        await set(ref(db, 'community_event'), { active: false, totalStars: 0, rewardedGoals: {}, endsAt: null });
+    }
+    toast('✅ Ивент сброшен');
+};
+
+// ===== MELLSTROY EVENT CLICKER =====
+let _mellLastClick = 0;
+let _mellClickInProgress = false;
+
+window.mellstroyClick = async () => {
+    if(!me || !meData) { toast('Войдите в аккаунт', 1); return; }
+    const now = Date.now();
+    if(now - _mellLastClick < 500) return; // 0.5s антикликер
+    _mellLastClick = now;
+
+    // Visual feedback
+    const inner = document.getElementById('mell-click-inner');
+    if(inner) {
+        inner.style.transform = 'scale(0.92)';
+        inner.style.boxShadow = '0 4px 20px rgba(220,38,38,0.3)';
+        setTimeout(() => {
+            inner.style.transform = 'scale(1)';
+            inner.style.boxShadow = '0 12px 40px rgba(220,38,38,0.4)';
+        }, 100);
+    }
+
+    // Check event still active
+    const snap = await get(ref(db, 'mellstroy_event'));
+    const evData = snap.val() || {};
+    if(!evData.active) { toast('Ивент не активен', 1); return; }
+
+    const goal = evData.goal || 5000;
+    const currentTotal = evData.totalClicks || 0;
+    if(currentTotal >= goal) { toast('🏆 Ивент уже выполнен!', 1); return; }
+
+    let rewardTriggered = false;
+
+    // Atomic transaction
+    await runTransaction(ref(db, 'mellstroy_event'), (current) => {
+        if(!current || !current.active) return current;
+        const oldTotal = current.totalClicks || 0;
+        if(oldTotal >= (current.goal || 5000)) return current;
+        current.totalClicks = oldTotal + 1;
+        if(current.totalClicks >= (current.goal || 5000) && !current.rewardGiven) {
+            current.rewardGiven = true;
+            rewardTriggered = true;
+        }
+        return current;
+    });
+
+    // Double-check: re-read Firebase to confirm rewardGiven was just set
+    // (transaction callback can run multiple times, local var may be stale)
+    if(!rewardTriggered) {
+        const recheck = await get(ref(db, 'mellstroy_event'));
+        const recheckData = recheck.val() || {};
+        const total = recheckData.totalClicks || 0;
+        const goal2 = recheckData.goal || 5000;
+        // rewardGiven=true but we haven't given rewards yet (rewardGiven set THIS click)
+        // We can tell by checking if totalClicks just hit the goal
+        if(recheckData.rewardGiven && total >= goal2) {
+            // Check if reward was already distributed via separate flag
+            rewardTriggered = !recheckData.rewardDistributed;
+        }
+    }
+
+    // Update my personal click count
+    const myPath = `mellstroy_event_clicks/${me.uid}`;
+    await runTransaction(ref(db, myPath), (cur) => (cur || 0) + 1);
+
+    // Refresh my clicks display
+    const mySnap = await get(ref(db, myPath));
+    const myEl = document.getElementById('mell-my-clicks');
+    if(myEl) myEl.textContent = mySnap.val() || 0;
+
+    if(rewardTriggered) {
+        await giveMellstroyRewardToAll();
+    }
+};
+
+async function giveMellstroyRewardToAll() {
+    try {
+        // Mark as distributed first to prevent double-run from multiple clients
+        await update(ref(db, 'mellstroy_event'), { rewardDistributed: true });
+
+        toast('🎉 Mellstroy Event выполнен! Раздаём награды...', 4);
+        const usersSnap = await get(ref(db, 'users'));
+        if(!usersSnap.exists()) return;
+        const uids = Object.keys(usersSnap.val());
+
+        for(const uid of uids) {
+            try {
+                // Give 50 stars only
+                await runTransaction(ref(db, 'users/' + uid), (u) => {
+                    if(!u) return u;
+                    u.stars = (u.stars || 0) + 50;
+                    return u;
+                });
+                // Give Mellstroy gift
+                const giftRef = push(ref(db, 'users/' + uid + '/gifts'));
+                await set(giftRef, {
+                    giftId: 'mellstroy',
+                    name: 'Mellstroy',
+                    image: 'Gifts/Mellstroy.png',
+                    emoji: '👊',
+                    from: '🔥 Mellstroy Event',
+                    to: 'Вам',
+                    timestamp: Date.now()
+                });
+            } catch(e) {
+                console.error('Mellstroy reward error for uid', uid, e);
+            }
+        }
+
+        // Refresh current user's data from Firebase so UI reflects rewards
+        if(me) {
+            const freshSnap = await get(ref(db, 'users/' + me.uid));
+            if(freshSnap.exists()) {
+                meData = freshSnap.val();
+                // Refresh stars display
+                if(window.updateStarsDisplay) updateStarsDisplay();
+            }
+        }
+
+        toast('✅ Все получили 50 ⭐ и подарок Mellstroy!', 5);
+        console.log('[Mellstroy] Rewards given to all users');
+    } catch(e) {
+        console.error('giveMellstroyRewardToAll error:', e);
+    }
+}
+
+// ===== MELLSTROY EVENT LISTENER =====
+let _mellEventUnsub = null;
+let _mellCountdownInterval = null;
+
+function listenMellstroyEvent() {
+    if(_mellEventUnsub) { try { _mellEventUnsub(); } catch(e) {} }
+    _mellEventUnsub = onValue(ref(db, 'mellstroy_event'), (snap) => {
+        const data = snap.val() || {};
+        renderMellstroyScreen(data);
+        // Update admin UI if mellstroy tab selected
+        if(_activeEventType === 'mellstroy') updateAdminEventUI(data);
+    });
+}
+
+function renderMellstroyScreen(data) {
+    const inactive = document.getElementById('mell-inactive-banner');
+    const active   = document.getElementById('mell-active-content');
+    const timerBan = document.getElementById('mell-timer-banner');
+    if(!inactive || !active) return;
+
+    if(!data.active) {
+        inactive.style.display = 'flex';
+        active.style.display = 'none';
+        return;
+    }
+    inactive.style.display = 'none';
+    active.style.display = 'flex';
+    active.style.flexDirection = 'column';
+
+    const total = data.totalClicks || 0;
+    const goal  = data.goal || 5000;
+    const pct   = Math.min(100, Math.round((total / goal) * 100));
+
+    const totalEl = document.getElementById('mell-total-clicks');
+    const goalEl  = document.getElementById('mell-goal-display');
+    const pctEl   = document.getElementById('mell-pct-text');
+    const barEl   = document.getElementById('mell-main-progress');
+    if(totalEl) totalEl.textContent = total;
+    if(goalEl)  goalEl.textContent  = goal;
+    if(pctEl)   pctEl.textContent   = pct + '%';
+    if(barEl)   barEl.style.width   = pct + '%';
+
+    // Disable button if done
+    const btn = document.getElementById('mell-click-btn');
+    if(btn) {
+        btn.disabled = total >= goal;
+        btn.style.opacity = total >= goal ? '0.5' : '1';
+    }
+
+    // Load my clicks
+    if(me) {
+        get(ref(db, `mellstroy_event_clicks/${me.uid}`)).then(s => {
+            const myEl = document.getElementById('mell-my-clicks');
+            if(myEl) myEl.textContent = s.val() || 0;
+        });
+    }
+
+    // Timer
+    if(data.endsAt && data.endsAt > Date.now()) {
+        if(timerBan) timerBan.style.display = 'flex';
+        if(_mellCountdownInterval) clearInterval(_mellCountdownInterval);
+        const tick = () => {
+            const left = Math.max(0, (data.endsAt || 0) - Date.now());
+            const h = Math.floor(left / 3600000);
+            const m = Math.floor((left % 3600000) / 60000);
+            const s = Math.floor((left % 60000) / 1000);
+            const el = document.getElementById('mell-countdown-text');
+            if(el) el.textContent = left > 0 ? `${h}ч ${String(m).padStart(2,'0')}м ${String(s).padStart(2,'0')}с` : 'Ивент завершён';
+            if(left <= 0) clearInterval(_mellCountdownInterval);
+        };
+        tick();
+        _mellCountdownInterval = setInterval(tick, 1000);
+    } else {
+        if(timerBan) timerBan.style.display = 'none';
+    }
+}
+
+// ===== MELLSTROY MODE (Music) =====
+let _mellAudio = null;
+
+function getMellAudio() {
+    if(!_mellAudio) {
+        _mellAudio = document.getElementById('mellstroy-audio');
+        if(!_mellAudio) {
+            _mellAudio = new Audio('Gifts/Mellstroy.mp3');
+            _mellAudio.loop = true;
+        }
+    }
+    return _mellAudio;
+}
+
+window.toggleMellstroyMode = async () => {
+    if(!me) return;
+    const isOn = meData?.mellstroyModeActive === true;
+    const newVal = !isOn;
+
+    // Update Firebase
+    await update(ref(db, 'users/' + me.uid), { mellstroyModeActive: newVal });
+    meData.mellstroyModeActive = newVal;
+
+    applyMellstroyMode(newVal);
+};
+
+function applyMellstroyMode(isOn) {
+    const btn   = document.getElementById('mellstroy-mode-toggle');
+    const knob  = document.getElementById('mellstroy-mode-knob');
+    if(btn)  btn.style.background  = isOn ? '#dc2626' : '';
+    if(knob) knob.style.left = isOn ? '28px' : '4px';
+
+    const audio = getMellAudio();
+    if(isOn) {
+        audio.play().catch(e => console.warn('Audio play blocked:', e));
+    } else {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+}
+
+async function checkMellstroyMode() {
+    // Always available to everyone — just restore active state
+    if(!me) return;
+    try {
+        const snap = await get(ref(db, 'users/' + me.uid));
+        if(snap.exists()) meData = snap.val();
+    } catch(e) {}
+    // Always show the row
+    const row = document.getElementById('mellstroy-mode-row');
+    if(row) row.style.display = 'block';
+    if(meData?.mellstroyModeActive) applyMellstroyMode(true);
+}
+
+// Hook into auth startup
+const _origAuthStartupMell = window._eventListenerStarted;
+
+window.openEventPicker = async () => {
+    const [commSnap, mellSnap] = await Promise.all([
+        get(ref(db, 'community_event/active')),
+        get(ref(db, 'mellstroy_event/active'))
+    ]);
+    const commActive = commSnap.val() === true;
+    const mellActive = mellSnap.val() === true;
+
+    if(commActive && mellActive) {
+        // Both active — show picker
+        const modal = document.getElementById('event-picker-modal');
+        if(modal) modal.style.display = 'flex';
+    } else if(commActive) {
+        nav('event-screen');
+    } else if(mellActive) {
+        nav('mellstroy-event-screen');
+    } else {
+        // No event active — go to no-event screen
+        nav('no-event-screen');
+    }
+};
+
+
 // ========== COUNTDOWN SYSTEM ==========
 let _countdownInterval = null;
 
@@ -10314,6 +10974,380 @@ if(!_origAuthForCountdown) {
     window._eventAuthHooked = true;
     // Countdown listener started via the onValue in auth callback below
 }
+
+// ===================================================
+// ======= ALL NEW FEATURES JS =======================
+// ===================================================
+
+// ---- Feature 2: No-event screen listener ----
+// Already handled by openEventPicker above
+
+// ---- Feature 3: Email hide toggle ----
+let _emailHidden = localStorage.getItem('drawer_email_hidden') === '1';
+window.toggleDrawerEmail = () => {
+    _emailHidden = !_emailHidden;
+    localStorage.setItem('drawer_email_hidden', _emailHidden ? '1' : '0');
+    const emailEl = document.getElementById('drawer-email');
+    const eyeEl   = document.getElementById('drawer-email-eye');
+    if(emailEl) emailEl.style.visibility = _emailHidden ? 'hidden' : 'visible';
+    if(eyeEl)   eyeEl.textContent = _emailHidden ? 'visibility_off' : 'visibility';
+};
+// Apply on load
+setTimeout(() => {
+    if(_emailHidden) {
+        const emailEl = document.getElementById('drawer-email');
+        const eyeEl   = document.getElementById('drawer-email-eye');
+        if(emailEl) emailEl.style.visibility = 'hidden';
+        if(eyeEl)   eyeEl.textContent = 'visibility_off';
+    }
+}, 800);
+
+// ---- Feature 4: NEWS SYSTEM ----
+let _newsUnsub = null;
+
+function listenNews() {
+    if(_newsUnsub) { try { _newsUnsub(); } catch(e) {} }
+    _newsUnsub = onValue(ref(db, 'news'), (snap) => {
+        const data = snap.val() || {};
+        renderNewsList(data);
+        renderAdminNewsList(data);
+    });
+}
+
+function renderNewsList(data) {
+    const container = document.getElementById('news-items-list');
+    const empty     = document.getElementById('news-empty');
+    if(!container) return;
+
+    const items = Object.entries(data).map(([id, v]) => ({id, ...v}))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+    if(items.length === 0) {
+        if(empty) empty.style.display = 'flex';
+        container.innerHTML = '';
+        return;
+    }
+    if(empty) empty.style.display = 'none';
+
+    container.innerHTML = items.map(item => {
+        const date = item.createdAt ? new Date(item.createdAt).toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'}) : '';
+        const preview = (item.body || '').substring(0, 120) + ((item.body||'').length > 120 ? '...' : '');
+        return `<div onclick="openNewsDetail('${item.id}')" style="background:var(--surface);border-radius:20px;padding:16px 18px;cursor:pointer;border:1px solid var(--border);transition:transform 0.1s;" onmousedown="this.style.transform='scale(0.98)'" onmouseup="this.style.transform=''" ontouchstart="this.style.transform='scale(0.98)'" ontouchend="this.style.transform=''">
+            <div style="font-size:10px;font-weight:800;color:#3b82f6;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">📰 ${date}</div>
+            <div style="font-size:16px;font-weight:900;color:var(--text-primary);margin-bottom:6px;">${item.title || 'Без названия'}</div>
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">${preview}</div>
+        </div>`;
+    }).join('');
+}
+
+window.openNewsDetail = (id) => {
+    get(ref(db, 'news/' + id)).then(snap => {
+        if(!snap.exists()) return;
+        const item = snap.val();
+        const date = item.createdAt ? new Date(item.createdAt).toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
+        const titleEl = document.getElementById('news-detail-title');
+        const dateEl  = document.getElementById('news-detail-date');
+        const bodyEl  = document.getElementById('news-detail-body');
+        if(titleEl) titleEl.textContent = item.title || 'Новость';
+        if(dateEl)  dateEl.textContent  = '📅 ' + date;
+        if(bodyEl)  bodyEl.textContent  = item.body || '';
+        nav('news-detail-screen');
+    });
+};
+
+function renderAdminNewsList(data) {
+    const container = document.getElementById('admin-news-list');
+    if(!container) return;
+    const items = Object.entries(data).map(([id, v]) => ({id, ...v}))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    if(items.length === 0) { container.innerHTML = '<div style="font-size:12px;color:#94a3b8;text-align:center;padding:12px;">Нет новостей</div>'; return; }
+    container.innerHTML = items.map(item =>
+        `<div style="background:var(--surface2);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
+            <div style="flex:1;font-size:12px;font-weight:700;color:var(--text-primary);">${item.title || 'Без названия'}</div>
+            <button onclick="adminDeleteNews('${item.id}')" style="background:#ef4444;border:none;border-radius:8px;color:white;padding:4px 10px;font-size:11px;font-weight:900;cursor:pointer;">✕</button>
+        </div>`
+    ).join('');
+}
+
+window.adminPublishNews = async () => {
+    if(!meData?.isAdmin) { toast('Только для администраторов', 1); return; }
+    const title = document.getElementById('admin-news-title')?.value?.trim();
+    const body  = document.getElementById('admin-news-body')?.value?.trim();
+    if(!title) { toast('Введите заголовок', 1); return; }
+    if(!body)  { toast('Введите текст', 1); return; }
+    const newsRef = push(ref(db, 'news'));
+    await set(newsRef, { title, body, createdAt: Date.now(), authorId: me?.uid || 'admin' });
+    document.getElementById('admin-news-title').value = '';
+    document.getElementById('admin-news-body').value  = '';
+    toast('✅ Новость опубликована!');
+};
+
+window.adminDeleteNews = async (id) => {
+    if(!meData?.isAdmin) return;
+    if(!confirm('Удалить эту новость?')) return;
+    await remove(ref(db, 'news/' + id));
+    toast('🗑️ Новость удалена');
+};
+
+// Start news listener after auth
+// (hooked into auth callback below via _eventListenerStarted block)
+
+// ---- Feature 1: ADMIN BULK CLEAR ----
+window.adminClearGiftsAll = async () => {
+    if(!meData?.isAdmin) { toast('Только администраторам', 1); return; }
+    const giftType = document.getElementById('admin-clear-gift-type')?.value || 'all';
+    const label = giftType === 'all' ? 'ВСЕ подарки' : `подарки "${giftType}"`;
+    if(!confirm(`Удалить ${label} у всех пользователей?`)) return;
+    const usersSnap = await get(ref(db, 'users'));
+    if(!usersSnap.exists()) return;
+    let count = 0;
+    for(const uid of Object.keys(usersSnap.val())) {
+        const giftsSnap = await get(ref(db, 'users/' + uid + '/gifts'));
+        if(!giftsSnap.exists()) continue;
+        if(giftType === 'all') {
+            await remove(ref(db, 'users/' + uid + '/gifts'));
+            count++;
+        } else {
+            const gifts = giftsSnap.val();
+            for(const [gid, g] of Object.entries(gifts)) {
+                if(g.giftId === giftType) {
+                    await remove(ref(db, 'users/' + uid + '/gifts/' + gid));
+                    count++;
+                }
+            }
+        }
+    }
+    toast(`✅ Удалено ${count} подарков у всех пользователей`);
+};
+
+window.adminClearSpinsAll = async () => {
+    if(!meData?.isAdmin) return;
+    if(!confirm('Сбросить спины рулетки у ВСЕХ пользователей?')) return;
+    const usersSnap = await get(ref(db, 'users'));
+    if(!usersSnap.exists()) return;
+    for(const uid of Object.keys(usersSnap.val())) {
+        await update(ref(db, 'users/' + uid), { eventSpins: 0 });
+        await set(ref(db, 'roulette_state/' + uid + '/spins'), 0).catch(()=>{});
+    }
+    toast('✅ Спины рулетки сброшены у всех');
+};
+
+window.adminClearStarsAll = async () => {
+    if(!meData?.isAdmin) return;
+    const amtEl = document.getElementById('admin-clear-stars-amount');
+    const amount = parseInt(amtEl?.value || '0');
+    const label = amount === 0 ? 'ВСЕ звёзды' : `${amount} звёзд`;
+    if(!confirm(`Снять ${label} у всех пользователей?`)) return;
+    const usersSnap = await get(ref(db, 'users'));
+    if(!usersSnap.exists()) return;
+    for(const [uid, u] of Object.entries(usersSnap.val())) {
+        const cur = u.stars || 0;
+        const newStars = amount === 0 ? 0 : Math.max(0, cur - amount);
+        await update(ref(db, 'users/' + uid), { stars: newStars });
+    }
+    toast(`✅ Звёзды сняты у всех`);
+};
+
+window.adminResetRepAll = async () => {
+    if(!meData?.isAdmin) return;
+    if(!confirm('Сбросить репутацию и уровень у ВСЕХ пользователей?')) return;
+    const usersSnap = await get(ref(db, 'users'));
+    if(!usersSnap.exists()) return;
+    for(const uid of Object.keys(usersSnap.val())) {
+        await update(ref(db, 'users/' + uid), { repScore: 0, repLevel: 1 });
+    }
+    toast('✅ Репутация сброшена у всех');
+};
+
+// ---- Feature 5: REPUTATION & LEVELS ----
+const REP_PER_LEVEL = 100; // points to next level
+const SWEAR_WORDS = ['бля','блять','блядь','ёбаный','ёб','ёба','ебать','ебало','хуй','хуя','хуйня','пизда','пиздец','пизд','пидор','пидр','шлюха','сука','мразь','урод','идиот','тупой','дебил','мудак','ублюдок','залупа','член','дрочить'];
+
+function containsSwear(text) {
+    if(!text) return false;
+    const lower = text.toLowerCase();
+    return SWEAR_WORDS.some(w => lower.includes(w));
+}
+
+async function addRepScore(uid, delta, reason) {
+    try {
+        await runTransaction(ref(db, 'users/' + uid), (u) => {
+            if(!u) return u;
+            u.repScore = (u.repScore || 0) + delta;
+            // Compute level: each 100 positive points = +1 level above 1
+            // Negative rep: level stays 1 but rep goes negative
+            const score = u.repScore;
+            u.repLevel = score < 0 ? 1 : Math.floor(score / REP_PER_LEVEL) + 1;
+            return u;
+        });
+        console.log(`[Rep] uid=${uid} delta=${delta} reason=${reason}`);
+    } catch(e) {
+        console.error('addRepScore error:', e);
+    }
+}
+
+function getLevelColor(level, repScore) {
+    if(repScore < 0) return '#ef4444';
+    if(level >= 50) return '#f59e0b';
+    if(level >= 20) return '#8b5cf6';
+    if(level >= 10) return '#3b82f6';
+    return '#22c55e';
+}
+
+function getLevelTitle(level, repScore) {
+    if(repScore <= -3) return '💀 Заблокирован';
+    if(repScore === -2) return '🔇 Ограничен';
+    if(repScore === -1) return '⚠️ Предупреждение';
+    if(level >= 50) return '🌟 Легенда';
+    if(level >= 30) return '💎 Мастер';
+    if(level >= 20) return '🔮 Эксперт';
+    if(level >= 10) return '⚡ Активный';
+    if(level >= 5)  return '🌱 Новичок+';
+    return '🐣 Новичок';
+}
+
+function renderLevelBar(levelLabel, progressEl, repLabel, repStatusEl, repScore, repLevel) {
+    const score    = repScore || 0;
+    const level    = repLevel || 1;
+    const pct      = score < 0 ? 0 : Math.min(100, ((score % REP_PER_LEVEL) / REP_PER_LEVEL) * 100);
+    const color    = getLevelColor(level, score);
+    const title    = getLevelTitle(level, score);
+
+    if(levelLabel)   { levelLabel.textContent = `${title} • Ур. ${level}`; levelLabel.style.color = color; }
+    if(progressEl)   { progressEl.style.width = pct + '%'; progressEl.style.background = `linear-gradient(90deg,${color},${color}aa)`; }
+    if(repLabel)     repLabel.textContent = `${score >= 0 ? '+' : ''}${score} очков`;
+    if(repStatusEl)  {
+        if(score <= -3) { repStatusEl.textContent = '❌ Нельзя писать и публиковать'; repStatusEl.style.color = '#ef4444'; }
+        else if(score === -2) { repStatusEl.textContent = '⚠️ Нельзя: голосовые, фото на прогулке'; repStatusEl.style.color = '#f97316'; }
+        else if(score === -1) { repStatusEl.textContent = '⚠️ Нельзя отправлять фото'; repStatusEl.style.color = '#f59e0b'; }
+        else repStatusEl.textContent = '';
+    }
+}
+
+function renderMyLevelBar() {
+    if(!meData) return;
+    renderLevelBar(
+        document.getElementById('p-level-label'),
+        document.getElementById('p-level-progress'),
+        document.getElementById('p-rep-label'),
+        document.getElementById('p-rep-status'),
+        meData.repScore || 0,
+        meData.repLevel || 1
+    );
+}
+
+function renderVpLevelBar(userData) {
+    renderLevelBar(
+        document.getElementById('vp-level-label'),
+        document.getElementById('vp-level-progress'),
+        document.getElementById('vp-rep-label'),
+        null,
+        userData.repScore || 0,
+        userData.repLevel || 1
+    );
+}
+
+// Hook into profile screen nav
+const _origNavForLevel = window.nav;
+window.nav = function(s) {
+    if(_origNavForLevel) _origNavForLevel(s);
+    if(s === 'profile-screen') setTimeout(renderMyLevelBar, 200);
+};
+
+// Hook into sendMessageToFirebase to give +1 rep per message and check swears
+const _origSendMsg = window.sendMessageToFirebase;
+// We patch at the source level via the reputation check in sendMsg wrapper
+window._repCheckAndSend = async (text) => {
+    if(!me || !meData) return false;
+    const score = meData.repScore || 0;
+
+    // Check restrictions
+    if(score <= -3) { toast('❌ Ваша репутация слишком низкая. Вы не можете писать.', 2); return false; }
+
+    // Check swear words -> -1 rep
+    if(containsSwear(text)) {
+        await addRepScore(me.uid, -1, 'swear');
+        meData.repScore = (meData.repScore || 0) - 1;
+        meData.repLevel = meData.repScore < 0 ? 1 : Math.floor(meData.repScore / REP_PER_LEVEL) + 1;
+        toast('⚠️ Обнаружен мат. -1 к репутации', 2);
+    } else {
+        // +1 rep per message
+        await addRepScore(me.uid, 1, 'message');
+        meData.repScore = (meData.repScore || 0) + 1;
+        meData.repLevel = Math.floor(meData.repScore / REP_PER_LEVEL) + 1;
+    }
+    renderMyLevelBar();
+    return true;
+};
+
+// Restrictions for media/voice (hook into mediaIn)
+window._checkRepForMedia = (type) => {
+    if(!meData) return true;
+    const score = parseInt(meData.repScore || 0);
+    if(score <= -3) { toast('❌ Репутация -3: нельзя ничего отправлять', 2); return false; }
+    if(score <= -2 && (type === 'voice' || type === 'walk')) {
+        toast('⚠️ Репутация -2: голосовые и прогулки недоступны', 2);
+        return false;
+    }
+    if(score <= -1 && type === 'photo') {
+        toast('⚠️ Репутация -1: отправка фото недоступна', 2);
+        return false;
+    }
+    return true;
+};
+
+// Gift giving gives +5 rep
+const _origSendGiftFn = window.sendGift;
+window.sendGift = async (...args) => {
+    if(_origSendGiftFn) await _origSendGiftFn(...args);
+    if(me && meData) {
+        await addRepScore(me.uid, 5, 'gift');
+        meData.repScore = (meData.repScore || 0) + 5;
+        meData.repLevel = Math.floor(Math.max(0, meData.repScore) / REP_PER_LEVEL) + 1;
+        renderMyLevelBar();
+    }
+};
+
+// Hook listenNews into auth startup
+const _origAuthRef2 = window._eventListenerStarted;
+
+// ===== ADMIN ROULETTE TOGGLE =====
+function listenRouletteToggle() {
+    onValue(ref(db, 'app_settings/rouletteEnabled'), (snap) => {
+        const enabled = snap.val() !== false; // default true
+        applyRouletteVisibility(enabled);
+        updateAdminRouletteUI(enabled);
+    });
+}
+
+function applyRouletteVisibility(enabled) {
+    const btn = document.getElementById('t-roulette');
+    if(btn) btn.style.display = enabled ? '' : 'none';
+    if(!enabled) {
+        const activeScreen = document.querySelector('.screen.active');
+        if(activeScreen && activeScreen.id === 'roulette-screen') {
+            nav('chats-screen');
+        }
+    }
+}
+
+function updateAdminRouletteUI(enabled) {
+    const statusEl  = document.getElementById('admin-roulette-status');
+    const toggleBtn = document.getElementById('admin-roulette-toggle-btn');
+    if(statusEl)  statusEl.textContent = enabled ? '🟢 Включена у всех' : '🔴 Скрыта у всех';
+    if(toggleBtn) {
+        toggleBtn.textContent      = enabled ? 'Отключить' : 'Включить';
+        toggleBtn.style.background = enabled ? '#ef4444'   : '#22c55e';
+    }
+}
+
+window.adminToggleRoulette = async () => {
+    if(!meData?.isAdmin) { toast('Только для администраторов', 1); return; }
+    const snap    = await get(ref(db, 'app_settings/rouletteEnabled'));
+    const current = snap.val() !== false;
+    await set(ref(db, 'app_settings/rouletteEnabled'), !current);
+    toast(!current ? '🟢 Рулетка включена у всех' : '🔴 Рулетка скрыта у всех');
+};
 
 </script>
 <input type="file" id="file-input" accept="image/*,video/*" style="display: none;" onchange="uploadFile(this)"/>
